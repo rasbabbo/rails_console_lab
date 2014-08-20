@@ -136,10 +136,25 @@ from /Library/Ruby/Gems/2.0.0/gems/activerecord-4.1.3/lib/active_record/validati
   SQL (0.9ms)  DELETE FROM "students" WHERE "students"."id" = $1  [["id", 5]]
    (18.1ms)  COMMIT
 
-   
+
 
 ### Bonus
 1. Use the validates_format_of and regex to only validate names that consist of letters (no numbers or symbols) and start with a capital letter
+
+class Student < ActiveRecord::Base
+	validates_format_of :first_name, :last_name, :with /([^\.].*?)(?=\.|\Z)/
+end
+
+
 2. Write a custom validation to ensure that no one named Delmer Reed, Tim Licata, Anil Bridgpal or Elie Schoppik is included in the students table
+
+FORBIDDEN_USERNAMES = ["Delmer Reed", "Tim Licata", "Anil Bridgpal", "Elie Schoppik"]
+validate :username_is_allowed
+
+def username_is_allowed
+		if FORBIDDEN_USERNAMES.include?(username)
+				errors.add(:username, "this is a restricted username")
+		end
+end
 
 
